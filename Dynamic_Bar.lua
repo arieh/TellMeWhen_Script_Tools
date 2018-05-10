@@ -2,6 +2,8 @@ local TMW = TMW
 local TMW_ST = TMW_ST
 if not TMW or not TMW_ST then return end
 
+local L = TMW.L
+
 local Type = TMW.Classes.IconType:New("dynamicbar")
 Type.name = "Dynamic Bar"
 Type.desc = "A Bar that can be controlled by LUA scripts"
@@ -16,6 +18,18 @@ Type:SetAllowanceForView("icon", false)
 Type:UsesAttributes("value, maxValue, valueColor")
 Type:UsesAttributes("state")
 Type:UsesAttributes("texture")
+Type:UsesAttributes("conditionFailed")
+
+local STATE_SUCCEED = TMW.CONST.STATE.DEFAULT_SHOW
+local STATE_FAIL = TMW.CONST.STATE.DEFAULT_HIDE
+
+Type:RegisterConfigPanel_XMLTemplate(165, "TellMeWhen_IconStates", {
+	[STATE_SUCCEED] = { text = "|cFF00FF00" .. L["ICONMENU_SUCCEED2"], },
+	[STATE_FAIL] =    { text = "|cFFFF0000" .. L["ICONMENU_FAIL2"],    },
+})
+
+Type:RegisterConfigPanel_XMLTemplate(150, "TellMeWhen_ConditionIconSettings")
+
 
 local function Value_OnUpdate(icon)
 	if not icon.script_values.triggerFunc(icon) then

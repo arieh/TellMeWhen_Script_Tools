@@ -27,7 +27,7 @@ function TMW_ST:UpdateCounter(name, value)
 	TMW:Fire("TMW_COUNTER_MODIFIED", name)
 end
 
-function TMS_ST:GetCounter(name)
+function TMW_ST:GetCounter(name)
 	return TMW.COUNTERS[name]
 end
 
