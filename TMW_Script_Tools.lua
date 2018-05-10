@@ -16,15 +16,19 @@ function TMW_ST:toggleDebug()
 	debug = not debug
 end
 
-function TMW_ST:initCounter(name, initialValue)
+function TMW_ST:InitCounter(name, initialValue)
 	TMW_ST:printDebug("Initializing Counter", name, initialValue)
 	TMW.COUNTERS[name] = initialValue or 0
 end			
 
-function TMW_ST:updateCounter(name, value)
+function TMW_ST:UpdateCounter(name, value)
 	TMW_ST:printDebug("Setting Counter Value", name, value)
 	TMW.COUNTERS[name] = value
 	TMW:Fire("TMW_COUNTER_MODIFIED", name)
+end
+
+function TMS_ST:GetCounter(name)
+	return TMW.COUNTERS[name]
 end
 
 TMW_ST.ScriptTexts = {}
