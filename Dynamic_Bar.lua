@@ -18,24 +18,12 @@ Type:SetAllowanceForView("icon", false)
 Type:UsesAttributes("value, maxValue, valueColor")
 Type:UsesAttributes("state")
 Type:UsesAttributes("texture")
-Type:UsesAttributes("conditionFailed")
-
-local STATE_SUCCEED = TMW.CONST.STATE.DEFAULT_SHOW
-local STATE_FAIL = TMW.CONST.STATE.DEFAULT_HIDE
-
-Type:RegisterConfigPanel_XMLTemplate(165, "TellMeWhen_IconStates", {
-	[STATE_SUCCEED] = { text = "|cFF00FF00" .. L["ICONMENU_SUCCEED2"], },
-	[STATE_FAIL] =    { text = "|cFFFF0000" .. L["ICONMENU_FAIL2"],    },
-})
-
-Type:RegisterConfigPanel_XMLTemplate(150, "TellMeWhen_ConditionIconSettings")
-
 
 local function Value_OnUpdate(icon)
 	if not icon.script_values.triggerFunc(icon) then
 		return
 	end
-	
+
 	if icon.script_values.changed then
 		icon:YieldInfo(true, icon.script_values.current, icon.script_values.max, icon.script_values.colors)
 
@@ -81,7 +69,7 @@ function Type:Setup(icon)
 	function icon:setCurrentValue(value)
 		TMW_ST:printDebug("icon:setCurrentValue", value)
 
-		if (value > values.max) then return end
+		if (not value or value > values.max) then return end
 
 		values.current = value
 
