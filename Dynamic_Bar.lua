@@ -19,6 +19,16 @@ Type:UsesAttributes("value, maxValue, valueColor")
 Type:UsesAttributes("state")
 Type:UsesAttributes("texture")
 
+TMW:RegisterUpgrade(45013, {
+	icon = function(self, ics)
+		if ics.Type == "dynamicbar" then
+			ics.Alpha = 1
+			ics.UnAlpha = ics.ConditionAlpha or 0
+			ics.ConditionAlpha = 0
+		end
+	end,
+})
+
 local function Value_OnUpdate(icon)
 	if not icon.script_values.triggerFunc(icon) then
 		return
@@ -90,7 +100,7 @@ function Type:Setup(icon)
  		values.triggerFunc = fnc
  	end
 
- 	icon:SetInfo("state;", {Alpha = 1})
+ 	icon:SetInfo("state;", 1)
 	icon:Update()
 end
 
