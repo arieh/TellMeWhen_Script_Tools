@@ -40,19 +40,19 @@ end
 
 local DogTag = LibStub("LibDogTag-3.0", true)
 if DogTag then
-	TMW:RegisterCallback("TMW_ST_VARIABLE_MODIFIED", DogTag.FireEvent, DogTag)
+	TMW:RegisterCallback("TMW_ST_VARIABLE_MODIFIED", DogTag, "FireEvent")
 
 	 DogTag:AddTag("TMW", "ST_GetScriptText", {
-            code = function(name)
-		return TMW_ST.ScriptTexts[name] or ""
-            end,
+		code = function(name)
+			return TMW_ST.ScriptTexts[name] or ""
+		end,
 		arg = {
 			'name', 'string', '@req',
 		},
-            ret = "string",
-            doc = "Return the value of a script variable",
-            example = '[ST_GetScriptText("var1")] => "my var"',
-            events = "TMW_ST_VARIABLE_MODIFIED",
-            category = "Userland"
+		ret = "string",
+		doc = "Return the value of a script variable",
+		example = '[ST_GetScriptText("var1")] => "my var"',
+		events = "TMW_ST_VARIABLE_MODIFIED",
+		category = "Userland"
     })
 end
