@@ -18,6 +18,7 @@ Type:UsesAttributes("state")
 Type:UsesAttributes("texture")
 Type:UsesAttributes("auraSourceUnit, auraSourceGUID")
 Type:UsesAttributes("start, duration")
+Type:UsesAttributes("stack, stackText")
 
 local STATE_SHOW = TMW.CONST.STATE.DEFAULT_SHOW
 
@@ -34,11 +35,12 @@ local function Value_OnUpdate(icon)
 	end
 
 	if script_values.changed then
-		icon:SetInfo("state; value, maxValue, valueColor; start, duration",
+		icon:SetInfo("state; value, maxValue, valueColor; start, duration; stack, stackText",
 			STATE_SHOW, 
 			script_values.current, script_values.max, 
 			script_values.colors,
-			script_values.duration.start, script_values.duration.duration
+			script_values.duration.start, script_values.duration.duration,
+			script_values.stacks.stacks, script_values.stacks.text
 		)
 
 		script_values.changed = false
@@ -60,6 +62,10 @@ function Type:Setup(icon)
 		duration = {
 			start = 0,
 			duration = 0
+		},
+		stacks = {
+			stacks = 0,
+			text = 0
 		},
 		colors = {"#ffff1200", "#ffffff00", "#ff00ff00"},
 		show = true,
@@ -94,6 +100,8 @@ function Type:Setup(icon)
 		local last = lastColor or values.colors[2]
 
 		values.colors = {start, mid, last}
+
+		values.changed = true
  	end
 
  	function icon:startDurationTracking(duration)
@@ -102,6 +110,20 @@ function Type:Setup(icon)
  		values.duration.start = TMW.time
  		values.duration.duration = duration
 		values.changed = true
+ 	end
+
+ 	function icon:setStacks(stacks, text)
+ 		TMW_ST:printDebug("icon:setStacks", stacks, text)
+
+ 		values.stacks.stacks = stacks
+
+ 		if (text ~= nil) then
+ 			values.stacks.text = text
+ 		else
+ 			values.stacks.text = stacks
+ 		end
+
+ 		values.changed = true
  	end
 
  	function icon:registerTriggerFunction(fnc)
