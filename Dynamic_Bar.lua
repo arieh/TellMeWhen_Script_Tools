@@ -8,9 +8,7 @@ local Type = TMW.Classes.IconType:New("dynamicbar")
 Type.name = "Dynamic Bar"
 Type.desc = "A Bar that can be controlled by LUA scripts"
 Type.menuIcon = "Interface/Icons/inv_box_04"
-Type.unitType = "unitid"
 Type.hasNoGCD = true
-Type.canControlGroup = true
 Type.menuSpaceBefore = true
 
 Type:SetAllowanceForView("icon", false)
@@ -19,34 +17,28 @@ Type:UsesAttributes("value, maxValue, valueColor")
 Type:UsesAttributes("state")
 Type:UsesAttributes("texture")
 
-TMW:RegisterUpgrade(45013, {
-	icon = function(self, ics)
-		if ics.Type == "dynamicbar" then
-			ics.Alpha = 1
-			ics.UnAlpha = ics.ConditionAlpha or 0
-			ics.ConditionAlpha = 0
-		end
-	end,
+local STATE_SHOW = TMW.CONST.STATE.DEFAULT_SHOW
+
+Type:RegisterConfigPanel_XMLTemplate(165, "TellMeWhen_IconStates", {
+	[STATE_SHOW]     = { order = 1, text = "|cFF00FF00" .. L["DEFAULT"], },
 })
 
+
 local function Value_OnUpdate(icon)
-	if not icon.script_values.triggerFunc(icon) then
+	local script_values = icon.script_values
+
+	if not script_values.triggerFunc(icon) then
 		return
 	end
 
-	if icon.script_values.changed then
-		icon:YieldInfo(true, icon.script_values.current, icon.script_values.max, icon.script_values.colors)
+	if script_values.changed then
 
-		icon.script_values.changed = false		
-		return
-	end
-end
-
-function Type:HandleYieldedInfo(icon, iconToSet, value, maxValue, valueColor)
-
-	iconToSet:SetInfo("value, maxValue, valueColor;",
-			value, maxValue, valueColor
+		icon:SetInfo("state; value, maxValue, valueColor;",
+			STATE_SHOW, script_values.current, script_values.max, script_values.colors
 		)
+
+		script_values.changed = false
+	end
 end
 
 
@@ -100,27 +92,19 @@ function Type:Setup(icon)
  		values.triggerFunc = fnc
  	end
 
- 	icon:SetInfo("state;", 1)
 	icon:Update()
 end
 
 TMW:RegisterCallback("TMW_CONFIG_ICON_TYPE_CHANGED", function(event, icon, type, oldType)
 	local icspv = icon:GetSettingsPerView()
 
-	if type == Type.type then
+	if type == Type.type and oldType == "" then
 		icon:GetSettings().CustomTex = "NONE"
 		local layout = TMW.TEXT:GetTextLayoutForIcon(icon)
 
 		if layout == "bar1" or layout == "bar2" then
 			icspv.Texts[1] = "[(Value / ValueMax * 100):Round:Percent]"
 			icspv.Texts[2] = "[Value:Short \"/\" ValueMax:Short]"
-		end
-	elseif oldType == Type.type then
-		if icspv.Texts[1] == "[(Value / ValueMax * 100):Round:Percent]" then
-			icspv.Texts[1] = nil
-		end
-		if icspv.Texts[2] == "[Value:Short \"/\" ValueMax:Short]" then
-			icspv.Texts[2] = nil
 		end
 	end
 end)

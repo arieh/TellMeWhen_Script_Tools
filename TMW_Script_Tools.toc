@@ -1,5 +1,5 @@
 ## Interface: 70300
-## Title: Masque: |cffffffffTellMeWhen Script Tools|r
+## Title: |cffffffffTellMeWhen Script Tools|r
 ## Version: 1.0.0
 ## Author: ariehg
 ## Notes: List of tools for advanced scripting with TellMeWhen.
