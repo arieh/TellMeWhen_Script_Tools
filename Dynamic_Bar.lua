@@ -16,6 +16,8 @@ Type:SetAllowanceForView("icon", false)
 Type:UsesAttributes("value, maxValue, valueColor")
 Type:UsesAttributes("state")
 Type:UsesAttributes("texture")
+Type:UsesAttributes("auraSourceUnit, auraSourceGUID")
+Type:UsesAttributes("start, duration")
 
 local STATE_SHOW = TMW.CONST.STATE.DEFAULT_SHOW
 
@@ -32,9 +34,11 @@ local function Value_OnUpdate(icon)
 	end
 
 	if script_values.changed then
-
-		icon:SetInfo("state; value, maxValue, valueColor;",
-			STATE_SHOW, script_values.current, script_values.max, script_values.colors
+		icon:SetInfo("state; value, maxValue, valueColor; start, duration",
+			STATE_SHOW, 
+			script_values.current, script_values.max, 
+			script_values.colors,
+			script_values.duration.start, script_values.duration.duration
 		)
 
 		script_values.changed = false
@@ -53,6 +57,10 @@ function Type:Setup(icon)
 		max = 100,
 		current = 0,
 		changed = true,
+		duration = {
+			start = 0,
+			duration = 0
+		},
 		colors = {"#ffff1200", "#ffffff00", "#ff00ff00"},
 		show = true,
 		triggerFunc = function() 
@@ -86,6 +94,14 @@ function Type:Setup(icon)
 		local last = lastColor or values.colors[2]
 
 		values.colors = {start, mid, last}
+ 	end
+
+ 	function icon:startDurationTracking(duration)
+ 		TMW_ST:printDebug("icon:startDurationTracking", start_value)
+
+ 		values.duration.start = TMW.time
+ 		values.duration.duration = duration
+		values.changed = true
  	end
 
  	function icon:registerTriggerFunction(fnc)
