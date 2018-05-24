@@ -85,8 +85,6 @@ function Type:Setup(icon)
 	function icon:setCurrentValue(value)
 		TMW_ST:printDebug("icon:setCurrentValue", value)
 
-		if (not value or value > values.max) then return end
-
 		values.current = value
 
 		values.changed = true
