@@ -6,4 +6,8 @@
 ## Dependencies: TellMeWhen
 
 TMW_Script_Tools.lua
-Dynamic_Bar.lua
+
+modules/Counters.lua
+modules/Dynamic_Bar.lua
+modules/EnemyCounter.lua
+modules/ScriptText.lua
