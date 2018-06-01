@@ -56,7 +56,7 @@ function TMW_ST:CountInRange(stop)
 end
 
 
-TMW_ST:InitCounter(TMW_ST.InRange.counter_name, 0)
+TMW_ST:InitCounter(TMW_ST.EnemyCounter_Config.counter_name, 0)
 
 function TMW_ST:UpdateUnitCounter()
     local count = TMW_ST:CountInRange()
