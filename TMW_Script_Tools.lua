@@ -6,6 +6,7 @@ local TMW_ST = {debug=false}
 
 _G.TMW_Script_Tools = LibStub("AceAddon-3.0"):NewAddon(TMW_ST, "TMW_Script_Tools", "AceEvent-3.0","AceConsole-3.0")
 _G.TMWST= _G.TMW_Script_Tools
+_G.TMW_ST = _G.TMW_Script_Tools
 
 local TMW_ST = _G.TMW_Script_Tools
 
