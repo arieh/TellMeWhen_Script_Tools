@@ -5,15 +5,18 @@
 ---
 
 local TMW_ST = TMW_Script_Tools
+local DogTag = LibStub("LibDogTag-3.0", true)
+local TMW = TMW
 
 TMW_ST.ScriptTexts = {}
+ 
+TMW:RegisterCallback("TMW_ST_VARIABLE_MODIFIED", DogTag.FireEvent, DogTag)
 
 function TMW_ST:SetScriptText(name, text)
     TMW_ST.ScriptTexts[name] = text
     TMW:Fire("TMW_ST_VARIABLE_MODIFIED", name)
 end
 
-local DogTag = LibStub("LibDogTag-3.0", true)
 if DogTag then
     DogTag:AddTag("TMW", "ST_GetScriptText", {
         code = function(name)
