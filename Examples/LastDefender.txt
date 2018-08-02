@@ -1,0 +1,8 @@
+This icon will show the current damage reduction and damage bonus your paladin is receiveing from Last Defender talent
+=============
+
+
+
+^1^T^SType^Sconditionicon ^SEvents^T ^N1^T ^SType^SLua ^SLua^S--~`<Untitled~`Lua~`Code>~J ~J local~`icon~`=~`...~J ~J TMW_ST:EnableUnitCounter(40)~J ~J ~J  ^SEvent^SOnEventsRestored ^t^Sn^N1 ^t^SEnabled^B ^SSettingsPerView^T ^Sicon^T ^STextLayout^STMW:textlayout:1OBCzG7djbEH ^STexts^T ^N1^S[(1~`-~`0.97~`~}~`Counter("tmwst_hostiles_in_range")):Round(2)]% ^N2^S[Counter("tmwst_hostiles_in_range")] ^t^t^t^SCustomTex^S203791 ^SStates^T ^N1^T ^t^N3^T ^t^N4^T ^t^t^SConditions^T ^N1^T ^SType^SCOUNTER ^SOperator^S> ^SName^Stmwst_hostiles_in_range ^t^N2^T ^SType^STALENTLEARNED ^SName^SLast~`Defender ^t^Sn^N2 ^t^t^N85204^S~`~| ^Sicon^^
+
+^1 ^T^N1^T ^SStringName^SNumber ^SConstrainWidth^b ^t^N2^T ^SAnchors^T ^N1^T ^Sy^N5 ^Spoint^STOPLEFT ^SrelativePoint^STOPLEFT ^t^t^SSize^N10 ^t^SGUID^STMW:textlayout:1OBCzG7djbEH ^Sn^N2 ^SName^SCenter~`Timer ^t^N85204^S~`~| ^Stextlayout^STMW:textlayout:1OBCzG7djbEH ^^

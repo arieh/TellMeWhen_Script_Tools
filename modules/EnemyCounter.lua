@@ -27,6 +27,7 @@ local EnemyCounter = {
     enabled = false,
     registered = false,
     max_scan = 40,
+    current_max = 5,
     counter_name = "tmwst_hostiles_in_range",
     last_time = time(),
     last_value = 0
@@ -71,8 +72,8 @@ end
 
 TMW_ST:InitCounter(TMW_ST.EnemyCounter_Config.counter_name, 0)
 
-function TMW_ST:UpdateUnitCounter()
-    local count = TMW_ST:CountInRange()
+function TMW_ST:UpdateUnitCounter(stop)
+    local count = TMW_ST:CountInRange(stop)
     local params = EnemyCounter
 
     if (count ~= params.count) then
@@ -81,19 +82,29 @@ function TMW_ST:UpdateUnitCounter()
     end
 end
 
-function TMW_ST:EnableUnitCounter()
+function TMW_ST:EnableUnitCounter(stop)
     local params = EnemyCounter
+
+    if (not stop) then
+        stop = EnemyCounter.current_max
+    end
+
+    if (stop < EnemyCounter.current_max) then 
+        stop = EnemyCounter.current_max
+    else
+        EnemyCounter.current_max = stop
+    end
 
     params.enabled = true
 
-    TMW_ST:UpdateUnitCounter()
+    TMW_ST:UpdateUnitCounter(stop)
 
     if (params.registered) then return end
 
     TMW_ST:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", function()
         if (not params.enabled) then return end
 
-        TMW_ST:UpdateUnitCounter()
+        TMW_ST:UpdateUnitCounter(stop)
     end)
 
     params.registered = true
@@ -101,6 +112,7 @@ end
 
 function TMW_ST:DisableUnitCounter()
     TMW_ST.InRange.enabled = false
+    EnemyCounter.current_max = 5
 end
 
 ConditionCategory:RegisterCondition(8.5,  "TMWSTENEMYCOUNT", {
