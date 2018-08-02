@@ -27,15 +27,26 @@ local EnemyCounter = {
     enabled = false,
     registered = false,
     max_scan = 40,
-    counter_name = "tmwst_hostiles_in_range"
+    counter_name = "tmwst_hostiles_in_range",
+    last_time = time(),
+    last_value = 0
 }
 
 TMW_ST.EnemyCounter_Config = EnemyCounter
 
 function TMW_ST:CountInRange(stop)
+
     if (not stop) then
         stop = 5
     end
+    
+    local current_time = time()
+
+    if (current_time == EnemyCounter.last_time and stop <= EnemyCounter.last_value) then
+        return EnemyCounter.last_value
+    end
+
+    EnemyCounter.last_time = current_time
 
     local count = 0
     local name
@@ -51,6 +62,8 @@ function TMW_ST:CountInRange(stop)
             end
         end
     end
+    
+    EnemyCounter.last_value = count
 
     return count
 end
