@@ -1,35 +1,34 @@
 local TMW_ST = TMW_Script_Tools
+local Timers = {}
+TMW_ST.Timers = Timers
 
-function wrap(method, name)
-	local t = TMW.TIMERS[name]
-	TMW_ST:printDebug("Timer "..method, name, t)
-	t[method](t)
-	if (method ~='GetTime') then
-		TMW:Fire("TMW_TIMER_MODIFIED", name)
+function wrap(method, func)
+	if (not func) then 
+		func = function(name)
+			local t = TMW.TIMERS[name]
+			TMW_ST:printDebug("Timer "..method, name, t)
+			t[method](t)
+			if (method ~='GetTime') then
+				TMW:Fire("TMW_TIMER_MODIFIED", name)
+			end
+		end
 	end
+
+	TMW_ST["Timer"..method] = func
+	Timers[method] = func
 end
 
-function TMW_ST:InitTimer(name)
-	wrap('GetTime', name)
+local methods = {"Start","Pause","Stop","Reset","GetTime"}
+
+for _,method in pairs(methods) do
+	wrap(method)
 end
 
-function TMW_ST:TimerStart(name)
-	wrap('Start', name)
-end
+wrap('Init', function(name)
+	Timers.GetTime(name);	
+end)
 
-function TMW_ST:TimerPause(name)
-	wrap('Pause', name)
-end
-
-function TMW_ST:TimerStop(name)
-	wrap('Stop', name)
-end
-
-function TMW_ST:TimerReset(name)
-	wrap('Reset', name)
-end
-
-function TMW_ST:TimerRestart(name)
-	wrap('Stop', name)
-	wrap('Start', name)
-end
+wrap('Restart', function(name)
+	Timers.Stop(name)
+	Timers.Start(name)
+end)
