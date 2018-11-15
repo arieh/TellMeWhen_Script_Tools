@@ -12,3 +12,5 @@ modules/Dynamic_Bar.lua
 modules/EnemyCounter.lua
 modules/ScriptText.lua
 modules/MythicPlus.lua
+modules/Timers.lua
+modules/AzeriteTrait.lua

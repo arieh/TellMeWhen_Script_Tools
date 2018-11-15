@@ -23,3 +23,20 @@ function TMW_ST:toggleDebug(value)
 		debug = not debug
 	end
 end
+
+local function isPowerLearned(powerid)
+    local isSelected        
+    for _, itemLocation in AzeriteUtil.EnumerateEquipedAzeriteEmpoweredItems() do
+        isSelected = C_AzeriteEmpoweredItem.IsPowerSelected(itemLocation, powerid)
+        if isSelected then return true end
+    end
+    return false
+end
+
+function TMW_ST:isAzeriteTrait(spellId)
+    if not AdvancedTooltips or not AdvancedTooltips.SpellData[spellId] then 
+    	return false 
+    end
+    
+    return isPowerLearned(AdvancedTooltips.SpellData[spellId][5])
+end
