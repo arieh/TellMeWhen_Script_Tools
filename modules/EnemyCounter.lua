@@ -55,7 +55,7 @@ function TMW_ST:CountInRange(stop)
     for i = 1, EnemyCounter.max_scan do
         name = 'nameplate' .. i
 
-        if _UnitExists(name) and _UnitReaction(name, "player") < 5 and _CheckInteractDistance(name, 2) == true then
+        if _UnitExists(name) and _UnitReaction(name, "player") < 5 and IsItemInRange("item:34368", name) == true then
             count = count + 1
 
             if count == stop then
