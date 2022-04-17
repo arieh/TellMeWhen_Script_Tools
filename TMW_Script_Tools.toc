@@ -1,6 +1,6 @@
 ## Interface: 90200
 ## Title: |cffffffffTellMeWhen Script Tools|r
-## Version: 1.1.2
+## Version: 1.2.7
 ## Author: ariehg
 ## Notes: List of tools for advanced scripting with TellMeWhen.
 ## Dependencies: TellMeWhen
@@ -13,4 +13,3 @@ modules/EnemyCounter.lua
 modules/ScriptText.lua
 modules/MythicPlus.lua
 modules/Timers.lua
-modules/AzeriteTrait.lua
