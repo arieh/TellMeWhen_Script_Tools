@@ -85,7 +85,7 @@ ConditionCategory:RegisterCondition(8.5,  "TMWSTEMPOWEREDSPELL", {
 
 			module:RegisterEvent("UNIT_SPELLCAST_EMPOWER_STOP", function()
 				for i=1,Env.EmpoweredNumStages do 
-					if module.Timers[i] then Timers[i]:Cancel() end
+					if module.Timers[i] then module.Timers[i]:Cancel() end
 				end		
 				module.Timers = {}
 				Env.EmpoweredStage = 0
