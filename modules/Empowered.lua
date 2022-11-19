@@ -26,7 +26,7 @@ ConditionCategory:RegisterCondition(8.5,  "TMWSTEMPOWEREDSPELL", {
 	end,
     min = 0,
     max = 5,
-    icon = "Interface\\Icons\\ability_hunter_snipershot",
+    icon = "Interface\\Icons\\inv_10_enchanting2_elementalswirl_color1",
     tcoords = CNDT.COMMON.standardtcoords,
 
     specificOperators = {["<="] = true, [">="] = true, ["=="]=true, ["~="]=true},
