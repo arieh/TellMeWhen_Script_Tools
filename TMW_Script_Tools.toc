@@ -1,6 +1,6 @@
-## Interface: 90200
+## Interface: 100000
 ## Title: |cffffffffTellMeWhen Script Tools|r
-## Version: 1.2.7
+## Version: 1.3.0
 ## Author: ariehg
 ## Notes: List of tools for advanced scripting with TellMeWhen.
 ## Dependencies: TellMeWhen
