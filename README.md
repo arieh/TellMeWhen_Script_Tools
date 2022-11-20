@@ -5,12 +5,13 @@ This addon is meant to add scripting capabilities to TellMeWhen, alongside addin
 
 # Main modules
 
-1. Counters and timers- adds the ability to manipulate TMW counters, timers and icon text in LUA.
-2. Dynamic Bar - adds a new bar type that is fully controlled by LUA.
-3. Conditions:
+1. [Counters and timers](#counters-and-timers)- adds the ability to manipulate TMW [counters](#counters), [timers](#timers) and [icon text](#script-text) in LUA.
+2. [Dynamic Bar](#dynamic-bar) - adds a new bar type that is fully controlled by LUA.
+3. [Conditions](#conditions):
 	a) Empowered Cast Stages - adds a new condition to track the cast stage of an empowered cast.
 	b) EnemyCounter - adds a new condition based on how many enemies are in melee range.
-4. Bar Ticks Marks - allows you to add tick-marks on bars with LUA
+4. [Bar Ticks Marks](#bar-tick-marks) - allows you to add tick-marks on bars with LUA
+	* [Example usages for tick marks](#tick-mark-examples)
 
 
 # How to use LUA hooks in TMW
@@ -46,6 +47,8 @@ TMW_ST:UpdateCounter(icon.my_config.counter_name, 1)
 local icon = ...
 TMW_ST:UpdateCounter(icon.my_config.counter_name, 0)
 ```
+
+The examples section includes a bunch of TMW imports that show usage of the varios modules.
 
 # Modules
 
@@ -138,7 +141,7 @@ Colors are the color strings for TMW color picker (without `#` at the start)
 * `TMW_ST.Ticks.modes.VERTICAL` - should be used for vertical bars.
 
 
-### Example
+### Tick Mark Examples
 
 Add 3 magenta colored ticks to a bar:
 
@@ -169,4 +172,3 @@ Ticks.addTick(icon, sb_cost/total_rage)
 
 -- if we were fancy we can instead run this code on load+talent_changed events so it's always correct
 ```
-
