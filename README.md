@@ -8,8 +8,10 @@ This addon is meant to add scripting capabilities to TellMeWhen, alongside addin
 1. [Counters and timers](#counters-and-timers)- adds the ability to manipulate TMW [counters](#counters), [timers](#timers) and [icon text](#script-text) in LUA.
 2. [Dynamic Bar](#dynamic-bar) - adds a new bar type that is fully controlled by LUA.
 3. [Conditions](#conditions):
+
 	a) Empowered Cast Stages - adds a new condition to track the cast stage of an empowered cast.
 	b) EnemyCounter - adds a new condition based on how many enemies are in melee range.
+	
 4. [Bar Ticks Marks](#bar-tick-marks) - allows you to add tick-marks on bars with LUA
 	* [Example usages for tick marks](#tick-mark-examples)
 
