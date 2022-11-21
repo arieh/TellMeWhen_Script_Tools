@@ -24,7 +24,7 @@ Env.EmpoweredCasts.getSpell = function(unit)
 	return Env.EmpoweredCasts.units[unit].spellName
 end
 
-ConditionCategory:RegisterCondition(8.5,  "TMWSTEMPOWEREDSPELL", {
+ConditionCategory:RegisterCondition(8.6,  "TMWSTEMPOWEREDSPELL", {
     text = "Empowered Spell Stage",
     tooltip = "Current stage of empowered spell",
 	useSUG = "spell",	
@@ -35,16 +35,6 @@ ConditionCategory:RegisterCondition(8.5,  "TMWSTEMPOWEREDSPELL", {
     max = 5,
     icon = "Interface\\Icons\\inv_10_enchanting2_elementalswirl_color1",
     tcoords = CNDT.COMMON.standardtcoords,
-
-    specificOperators = {["<="] = true, [">="] = true, ["=="]=true, ["~="]=true},
-
-    applyDefaults = function(conditionData, conditionSettings)
-        local op = conditionSettings.Operator
-
-        if not conditionData.specificOperators[op] then
-            conditionSettings.Operator = "<="
-        end
-    end,
 
 	events = function(ConditionObject, c)
 		return
