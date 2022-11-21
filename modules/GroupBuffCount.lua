@@ -29,8 +29,8 @@ function getGroupBuffCount(spell, stop)
 end
 
 ConditionCategory:RegisterCondition(8.7,  "TMWSTBUFFCOUNT", {
-    text = "Group Buff Count",
-    tooltip = "How many players in group have a certain buff",
+	text = "Group Buff Count",
+	tooltip = "How many players in group have a certain buff",
 
 	min = 0,
 	max = 10,
@@ -70,7 +70,7 @@ ConditionCategory:RegisterCondition(8.8,  "TMWSTALLGROUPBUFF", {
 		GetNumGroupMembers= GetNumGroupMembers
 	},
 	events = function(ConditionObject, c)
-	return
-	ConditionObject:GenerateNormalEventString("UNIT_AURA")
+		return
+			ConditionObject:GenerateNormalEventString("UNIT_AURA")
 	end,
 })
