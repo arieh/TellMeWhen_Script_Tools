@@ -34,9 +34,9 @@ ConditionCategory:RegisterCondition(8.7,  "TMWSTBUFFCOUNT", {
 
 	min = 0,
 	max = 10,
-	
+
 	name = function(editbox)
-	 	editbox:SetTexts(L["SPELLTOCOMP1"], L["CNDT_ONLYFIRST"])
+		editbox:SetTexts(L["SPELLTOCOMP1"], L["CNDT_ONLYFIRST"])
 	end,
 	useSUG = true,
 	unit = false,
@@ -53,12 +53,12 @@ ConditionCategory:RegisterCondition(8.7,  "TMWSTBUFFCOUNT", {
 })
 
 ConditionCategory:RegisterCondition(8.8,  "TMWSTALLGROUPBUFF", {
-    text = "All Group Has Buff",
-    tooltip = "How many players in group have a certain buff",
-    bool = true,
-	
+	text = "All Group Has Buff",
+	tooltip = "How many players in group have a certain buff",
+	bool = true,
+
 	name = function(editbox)
-	 	editbox:SetTexts(L["SPELLTOCOMP1"], L["CNDT_ONLYFIRST"])
+		editbox:SetTexts(L["SPELLTOCOMP1"], L["CNDT_ONLYFIRST"])
 	end,
 	useSUG = true,
 	unit = false,
@@ -70,7 +70,7 @@ ConditionCategory:RegisterCondition(8.8,  "TMWSTALLGROUPBUFF", {
 		GetNumGroupMembers= GetNumGroupMembers
 	},
 	events = function(ConditionObject, c)
-		return
-			ConditionObject:GenerateNormalEventString("UNIT_AURA")
+	return
+	ConditionObject:GenerateNormalEventString("UNIT_AURA")
 	end,
 })
