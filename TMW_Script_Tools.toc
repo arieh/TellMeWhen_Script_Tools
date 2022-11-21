@@ -1,12 +1,13 @@
 ## Interface: 100000
 ## Title: |cffffffffTellMeWhen Script Tools|r
-## Version: 1.3.5
+## Version: 1.3.6
 ## Author: ariehg
 ## Notes: List of tools for advanced scripting with TellMeWhen.
 ## Dependencies: TellMeWhen
 
 TMW_Script_Tools.lua
 
+modules/AuraTracker.lua
 modules/Counters.lua
 modules/Dynamic_Bar.lua
 modules/EnemyCounter.lua

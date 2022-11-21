@@ -6,19 +6,18 @@ local Env = CNDT.Env
 
 local ConditionCategory = CNDT:GetCategory("ATTRIBUTES_TMWST", 11, "Script Tools", false, false)
 
+
 function getGroupBuffCount(spell, stop)
 	if (not stop) then stop = 10 end
-	-- support all formats
-	local spellName = GetSpellInfo(spell)	
 
 	local count = 0
 
 	for i=1,GetNumGroupMembers() do
 		local name = GetRaidRosterInfo(i)
-
-		if (AuraUtil.FindAuraByName(spellName, name)) then 
-			count = count+1 
-		end
+			
+		if (TMW_ST.UnitAuras.getUnitAura(name, spell)) then
+			count = count+1
+		end	
 
 		if (count == stop) then 
 			return count 
@@ -28,15 +27,16 @@ function getGroupBuffCount(spell, stop)
 	return count
 end
 
+
 ConditionCategory:RegisterCondition(8.7,  "TMWSTBUFFCOUNT", {
-	text = "Group Buff Count",
-	tooltip = "How many players in group have a certain buff",
+    text = "Group Buff Count",
+    tooltip = "How many players in group have a certain buff",
 
 	min = 0,
 	max = 10,
-
+	
 	name = function(editbox)
-		editbox:SetTexts(L["SPELLTOCOMP1"], L["CNDT_ONLYFIRST"])
+	 	editbox:SetTexts(L["SPELLTOCOMP1"], L["CNDT_ONLYFIRST"])
 	end,
 	useSUG = true,
 	unit = false,
@@ -53,12 +53,12 @@ ConditionCategory:RegisterCondition(8.7,  "TMWSTBUFFCOUNT", {
 })
 
 ConditionCategory:RegisterCondition(8.8,  "TMWSTALLGROUPBUFF", {
-	text = "All Group Has Buff",
-	tooltip = "How many players in group have a certain buff",
-	bool = true,
-
+    text = "All Group Has Buff",
+    tooltip = "How many players in group have a certain buff",
+    bool = true,
+	
 	name = function(editbox)
-		editbox:SetTexts(L["SPELLTOCOMP1"], L["CNDT_ONLYFIRST"])
+	 	editbox:SetTexts(L["SPELLTOCOMP1"], L["CNDT_ONLYFIRST"])
 	end,
 	useSUG = true,
 	unit = false,
