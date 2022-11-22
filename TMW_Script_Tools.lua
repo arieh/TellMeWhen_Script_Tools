@@ -41,19 +41,14 @@ function TMW_ST:AddEvent(event, cb)
 	end
 end
 
-local function isPowerLearned(powerid)
-    local isSelected        
-    for _, itemLocation in AzeriteUtil.EnumerateEquipedAzeriteEmpoweredItems() do
-        isSelected = C_AzeriteEmpoweredItem.IsPowerSelected(itemLocation, powerid)
-        if isSelected then return true end
-    end
-    return false
-end
+function TMW_ST:RemoveEvent(event, cb)
+	if (not events[event]) then return end
+	local found = -1
+	for i=1, getn(events[event]) do
+		if (events[event][i] == cb) then found = i end
+	end
 
-function TMW_ST:isAzeriteTrait(spellId)
-    if not AdvancedTooltips or not AdvancedTooltips.SpellData[spellId] then 
-    	return false 
-    end
-    
-    return isPowerLearned(AdvancedTooltips.SpellData[spellId][5])
+	if (found > -1) then
+		tremove(events[event], found)
+	end
 end
