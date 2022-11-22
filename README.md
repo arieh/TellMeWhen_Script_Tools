@@ -182,6 +182,39 @@ Spell can be either spell name of spellId. Return value is [`UnitAuraInfo`](http
 
 ## Event Management
 
-### `TMW_ST:AddEvent(name, callback)` 
 
 Since many LUA scripts will require listening to game events, and since the default event listener API only allows one listener per event, I've added this method to allow multiple listeners to the same event.
+
+### `TMW_ST:AddEvent(name, callback)` 
+
+
+### `TMW_ST:RemoveEvent(name, callback)`
+
+### Example
+
+If your code is only meant to run when your icon is shown, it is recommended that add `onShow` and remove `onHide`. 
+
+```lua
+-- icon setup
+
+local icon = ...
+
+icon.config = {
+	handleEvent = function(event, unit)
+		print('aura updated on unit: '..unit)
+	end
+}
+```
+
+```lua
+-- onShow
+
+local icon = ...
+
+TMW_ST:AddEvent('UNIT_AURA', icon.config.handleEvent)
+```
+
+```lua
+-- onHide
+TMW_ST:RemoveEvent('UNIT_AURA', icon.config.handleEvent)
+```
