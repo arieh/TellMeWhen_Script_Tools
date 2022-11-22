@@ -7,14 +7,19 @@ This addon is meant to add scripting capabilities to TellMeWhen, alongside addin
 
 1. [Counters and timers](#counters-and-timers)- adds the ability to manipulate TMW [counters](#counters), [timers](#timers) and [icon text](#script-text) in LUA.
 2. [Dynamic Bar](#dynamic-bar) - adds a new bar type that is fully controlled by LUA.
-3. [Conditions](#conditions):
+3. [Bar Ticks Marks](#bar-tick-marks) - allows you to add tick-marks on bars with LUA
+
+	* [Example usages for tick marks](#tick-mark-examples)
+	
+4. [Aura Tracker](#aura-tracker) - lets you check for the existence of an aura on a group member
+5. [Event Management](#event-managment)
+	
+6. Conditions:
 
 	* Empowered Cast Stages - adds a new condition to track the cast stage of an empowered cast.
 	* EnemyCounter - adds a new condition based on how many enemies are in melee range.
-
-4. [Bar Ticks Marks](#bar-tick-marks) - allows you to add tick-marks on bars with LUA
-	* [Example usages for tick marks](#tick-mark-examples)
-
+	* Group Buff Count - count how many in your group have a certain buff
+	* All Group Has Buff - check for the existence of a buff for all group members
 
 # How to use LUA hooks in TMW
 
@@ -53,7 +58,6 @@ TMW_ST:UpdateCounter(icon.my_config.counter_name, 0)
 The examples section includes a bunch of TMW imports that show usage of the varios modules.
 
 # Modules
-
 
 ## Empower Cast Stage condition
 
@@ -120,13 +124,6 @@ Will set the stacks attribute of the icon, so you can access in via DogTags. If 
 This function will run on every update to the bar. If it returns `true` the update will commence, otherwise it will skip the update cycle.
 You can use this function if you want to monitor the icon update cycle, or to make calculations on every tick.
 
-## Conditions
-
-These are new condition types under the `Script Tools` sub-menu in the condition choices.
-
-1. Enemy Count - How many enemies are within melee range of player
-2. Epowered Spell Stage
-
 ## Bar Tick Marks
 
 1. `TMW_ST.Ticks.addTick(icon[,mode [,color] ] )` 
@@ -174,3 +171,17 @@ Ticks.addTick(icon, sb_cost/total_rage)
 
 -- if we were fancy we can instead run this code on load+talent_changed events so it's always correct
 ```
+
+## Aura Tracker
+
+Since the current `UnitAura` api requires that you iterate over all of a unit's auras, I've implemented a mechanism that tracks and caches unit auras so that the look up is super fast. This is *experimental*, so might have cases where it doesnt work. Let me know!
+
+### `MW_ST.UnitAuras.getUnitAura(unit, spell)`
+
+Spell can be either spell name of spellId. Return value is [`UnitAuraInfo`](https://wowpedia.fandom.com/wiki/Struct_UnitAuraInfo).
+
+## Event Management
+
+### `TMW_ST:AddEvent(name, callback)` 
+
+Since many LUA scripts will require listening to game events, and since the default event listener API only allows one listener per event, I've added this method to allow multiple listeners to the same event.
