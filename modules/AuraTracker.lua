@@ -1,60 +1,75 @@
 local EventHub = TMW_ST:NewModule("AuraTracker","AceEvent-3.0")
+
+-- the concept of this tracker is as follows:
+-- 1. We create a unit payload when either:
+--
+--   	a) User queries about the unit
+--   	b) A UNIT_AURA event was triggered for it.
+
+--	  In both cases, we create a full list of auras for that unit
+-- 2. When UNIT_AURA event is triggered, we update the list based on event
+-- 3. To make sure we dont risk cases where auras might be added outside of UNIT_AURA 
+--    range, we make sure to remove units when:
+--		a) their nameplate was removed, 
+--		b) they left the party
+--		c) their cache has passed the TTL 
+
+-- list of tracked units
+
 local units = {}
 
-TMW_ST.UnitAuras = {
-	getUnitAura = function(unit, spell)
-		local id = getId(unit)
-		local spellName = GetSpellInfo(spell)
-		if (not units[id]) then return nil end
-		return units[id].auras[spellName]
-	end
-}
+-- list of current roster memebers
+local roster = {}
 
-function getGroupBuffCount(spell, stop)
-	if (not stop) then stop = 10 end
-	-- support all formats
-	local spellName = GetSpellInfo(spell)	
+local CACHE_TTL = 60
 
-	local count = 0
+local cleanupTimer = C_Timer.NewTicker(CACHE_TTL, function()
+	TMW_ST:printDebug("AuraTracker: cleaning up cache")
 
-	for i=1,GetNumGroupMembers() do
-		local name = GetRaidRosterInfo(i)
-		local id = getId(name)
-			
-		if (units[id] and units[id].auras[spellName]) then
-			count = count+1
-		end	
+	local counter = 0
 
-		-- if (AuraUtil.FindAuraByName(spellName, name)) then 
-		-- 	count = count+1 
-		-- end
-
-		if (count == stop) then 
-			return count 
+	for guid, unit in pairs(units) do
+		if (TMW.time > units[guid].created+CACHE_TTL) then
+			units[guid] = nil
+			counter = counter+1
 		end
 	end
 
-	return count
-end
+	if (counter > 0) then
+		TMW_ST:printDebug("AuraTracker: cleaned up "..counter.." items")
+	end
+end)
 
 _G.debufUnitTracker  = function()
-	ViragDevTool:AddData(units,'units')
+	ViragDevTool:AddData(units,'TMW ST tracked units')
 end		
 
+TMW_ST.UnitAuras = {
+	getUnitAura = function(unit, spell)
+		-- in case the unit is not currently tracked, 
+		-- make sure to add it
+		local unit = addUnit(unit)
+		
+		if (not unit) then return nil end
 
-function getId(unit)
-	local name, realm = UnitNameUnmodified(unit)
-	return name .. (realm or '')
-end
+		-- normalize input
+		local spellName = GetSpellInfo(spell)
+
+		return unit.auras[spellName]
+	end
+}
 
 function addUnit(unit)
-	local id = getId(unit)
+	local id = UnitGUID(unit)
+
+	if (not id) then return nil end
 
 	if (units[id]) then return units[id] end
 
 	units[id] = {
 		auras = {},
-		instanceIds = {}
+		instanceIds = {},
+		created = TMW.time
 	}
 
     local function HandleAura(aura)
@@ -70,8 +85,10 @@ function addUnit(unit)
 end
 
 function addUnitAura(unit, aura)
+	TMW_ST:printDebug("AuraTracker: adding unit aura", unit, aura.name)
+
 	local config = addUnit(unit)
-	local spellName = GetSpellInfo(aura.name)
+	local spellName = GetSpellInfo(aura.name) or aura.name
 
 	config.auras[spellName] = aura
 	config.instanceIds[aura.auraInstanceID] = spellName
@@ -82,21 +99,16 @@ function removeUnitAura(unit, instanceId)
 
 	local spellName = config.instanceIds[instanceId]
 
+	TMW_ST:printDebug("AuraTracker: removing unit aura", unit, spellName)
+
 	if (spellName ~= nil) then
 		config.auras[spellName] = nil
 		config.instanceIds[instanceId] = nil
 	end	
 end
 
-function updateAuras()
-	for i=1,GetNumGroupMembers() do
-		local name = GetRaidRosterInfo(i)
-
-		addUnit(name)
-	end
-end
-
-function unitAura(event, unit, updates)
+-- update tracked units based on update payload
+EventHub:RegisterEvent('UNIT_AURA', function(event, unit, updates)
 	if (updates.addedAuras) then
 		for _,aura in ipairs(updates.addedAuras) do
 			addUnitAura(unit, aura)	
@@ -108,8 +120,35 @@ function unitAura(event, unit, updates)
 			removeUnitAura(unit, updates.removedAuraInstanceIDs[i])
 		end
 	end
-end
+end)
 
-EventHub:RegisterEvent('UNIT_AURA', unitAura)
-EventHub:RegisterEvent('PLAYER_ENTERING_WORLD', updateAuras)
-EventHub:RegisterEvent('GROUP_ROSTER_UPDATE', updateAuras)
+-- in case unit is not in range, might not be tracked by UNIT_AURA,
+-- so we remove its payload
+EventHub:RegisterEvent("NAME_PLATE_UNIT_REMOVED", function(event, token)
+	local guid = UnitGUID(token)
+	if (units[guid]) then
+		units[guid] = nil
+	end
+end)
+
+-- in case roster changed, we want to make sure we dont have stale
+-- data, so we clean it up
+EventHub:RegisterEvent('GROUP_ROSTER_UPDATE', function(event)
+	local new_roster = {}
+
+	for i=1,GetNumGroupMembers() do
+		local name = GetRaidRosterInfo(i)
+		local guid = UnitGUID(name)
+
+		new_roster[guid] = true
+	end
+
+	for guid,_ in pairs(roster) do
+		if (not new_roster[guid]) then
+			TMW_ST:printDebug("AuraTracker: roster update removed "..guid)
+			units[guid] = nil
+		end
+	end
+
+	roster = new_roster
+end)

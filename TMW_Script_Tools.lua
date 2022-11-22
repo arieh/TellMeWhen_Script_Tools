@@ -10,17 +10,17 @@ _G.TMW_ST = _G.TMW_Script_Tools
 
 local TMW_ST = _G.TMW_Script_Tools
 
-function TMW_ST:printDebug(text, var1, var2, var3)
+function TMW_ST:printDebug(...)
 	if TMW_ST.debug then
-		TMW_ST:Print(text, var1 or "", var2 or "", var3 or "")
+		TMW_ST:Print(...)
 	end
 end
 
 function TMW_ST:toggleDebug(value)
 	if (value ~= nil) then
-		debug = value
+		TMW_ST.debug = value
 	else
-		debug = not debug
+		TMW_ST.debug = not TMW_ST.debug
 	end
 end
 
