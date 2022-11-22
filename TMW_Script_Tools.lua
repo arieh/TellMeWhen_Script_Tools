@@ -24,6 +24,23 @@ function TMW_ST:toggleDebug(value)
 	end
 end
 
+local events = {}
+
+function triggerEvent(event,...)
+	for i=1,getn(events[event]) do
+		events[event][i](event,...)
+	end
+end
+
+function TMW_ST:AddEvent(event, cb)
+	if (not events[event]) then 
+		events[event] = {cb}
+		TMW_ST:RegisterEvent(event, triggerEvent)
+	else
+		tinsert(events[event], cb)
+	end
+end
+
 local function isPowerLearned(powerid)
     local isSelected        
     for _, itemLocation in AzeriteUtil.EnumerateEquipedAzeriteEmpoweredItems() do
