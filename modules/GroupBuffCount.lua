@@ -9,15 +9,19 @@ local ConditionCategory = CNDT:GetCategory("ATTRIBUTES_TMWST", 11, "Script Tools
 
 function getGroupBuffCount(spell, stop)
 	if (not stop) then stop = 10 end
+	local isParty = not IsInRaid()
+	local prefix = isParty and 'party' or 'raid'
 
 	local count = 0
+	local groupSize = GetNumGroupMembers()
+	local start = not isParty and 1 or 0
 
-	for i=1,GetNumGroupMembers() do
-		local name = GetRaidRosterInfo(i)
-			
+	for i=start, groupSize do
+		local name = i==0 and 'player' or prefix .. i
+
 		if (TMW_ST.UnitAuras.getUnitAura(name, spell)) then
 			count = count+1
-		end	
+		end
 
 		if (count == stop) then 
 			return count 
@@ -26,6 +30,12 @@ function getGroupBuffCount(spell, stop)
 
 	return count
 end
+
+function isFullGroupCovered(spell)
+	local groupSize = GetNumGroupMembers() or 1
+	if (groupSize == 0) then groupSize = 1 end
+	return getGroupBuffCount(spell, groupSize) == groupSize
+end	
 
 
 ConditionCategory:RegisterCondition(8.7,  "TMWSTBUFFCOUNT", {
@@ -64,10 +74,10 @@ ConditionCategory:RegisterCondition(8.8,  "TMWSTALLGROUPBUFF", {
 	unit = false,
 	icon = "Interface\\Icons\\ability_warrior_battleshout",
 	tcoords = CNDT.COMMON.standardtcoords,
-	funcstr = [[(getGroupBuffCount(c.NameFirst, GetNumGroupMembers()) or 0) == GetNumGroupMembers()]],
+	formatter = TMW.C.Formatter.BOOL,
+	funcstr = [[BOOLCHECK(isFullGroupCovered(c.NameFirst))]],
 	Env = {
-		getGroupBuffCount = getGroupBuffCount,
-		GetNumGroupMembers= GetNumGroupMembers
+		isFullGroupCovered = isFullGroupCovered
 	},
 	events = function(ConditionObject, c)
 		return

@@ -48,19 +48,18 @@ TMW_ST.UnitAuras = {
 	getUnitAura = function(unit, spell)
 		-- in case the unit is not currently tracked, 
 		-- make sure to add it
-		local unit = addUnit(unit)
+		local config = addUnit(unit)
 		
-		if (not unit) then return nil end
+		if (not config) then return nil end
 
 		-- normalize input
 		local spellName = GetSpellInfo(spell)
-
-		return unit.auras[spellName]
+		return config.auras[spellName]
 	end
 }
 
 function addUnit(unit)
-	local id = UnitGUID(unit)
+	local id = UnitGUID(unit or '')
 
 	if (not id) then return nil end
 
@@ -135,10 +134,9 @@ end)
 -- data, so we clean it up
 EventHub:RegisterEvent('GROUP_ROSTER_UPDATE', function(event)
 	local new_roster = {}
-
+	local prefix = IsInRaid() and 'raid' or 'party'
 	for i=1,GetNumGroupMembers() do
-		local name = GetRaidRosterInfo(i)
-		local guid = UnitGUID(name)
+		local guid = UnitGUID(prefix..i)
 
 		new_roster[guid] = true
 	end
