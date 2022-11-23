@@ -138,7 +138,7 @@ EventHub:RegisterEvent('GROUP_ROSTER_UPDATE', function(event)
 	for i=1,GetNumGroupMembers() do
 		local guid = UnitGUID(prefix..i)
 
-		new_roster[guid] = true
+		if guid then new_roster[guid] = true end
 	end
 
 	for guid,_ in pairs(roster) do
