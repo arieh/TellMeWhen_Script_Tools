@@ -8,7 +8,6 @@ local TMW_ST = TMW_Script_Tools
 
 --caching
 local _UnitExists = UnitExists
-local _CheckInteractDistance = CheckInteractDistance
 local _UnitReaction = UnitReaction
 
 local CNDT = TMW.CNDT
@@ -21,6 +20,8 @@ end
 
 
 local ConditionCategory = CNDT:GetCategory("ATTRIBUTES_TMWST", 11, "Script Tools", false, false)
+local LibRangeCheck = LibStub("LibRangeCheck-2.0")
+local rangeChecker = LibRangeCheck:GetHarmMaxChecker(8) or LibRangeCheck:GetHarmMinChecker(8)
 
 local EnemyCounter = {
     count = 0,
@@ -55,7 +56,7 @@ function TMW_ST:CountInRange(stop)
     for i = 1, EnemyCounter.max_scan do
         name = 'nameplate' .. i
 
-        if _UnitExists(name) and _UnitReaction(name, "player") < 5 and _CheckInteractDistance(name, 2) == true then
+        if _UnitExists(name) and _UnitReaction(name, "player") < 5 and rangeChecker(name) == true then
             count = count + 1
 
             if count == stop then
@@ -79,6 +80,7 @@ function TMW_ST:UpdateUnitCounter(stop)
     if (count ~= params.count) then
         TMW_ST:UpdateCounter(params.counter_name, count)
         params.count = count
+        TMW_ST:Print('counter', count)
     end
 end
 
@@ -101,7 +103,7 @@ function TMW_ST:EnableUnitCounter(stop)
 
     if (params.registered) then return end
 
-    TMW_ST:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", function()
+    TMW_ST:AddEvent("COMBAT_LOG_EVENT_UNFILTERED", function()
         if (not params.enabled) then return end
 
         TMW_ST:UpdateUnitCounter(stop)
