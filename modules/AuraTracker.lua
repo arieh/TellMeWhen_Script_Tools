@@ -1,5 +1,6 @@
 local EventHub = TMW_ST:NewModule("AuraTracker","AceEvent-3.0")
 local GetAuras = TMW.COMMON.Auras and TMW.COMMON.Auras.GetAuras
+local ConditionObject = TMW.ConditionObject
 
 -- the concept of this tracker is as follows:
 -- 1. We create a unit payload when either:
@@ -19,12 +20,24 @@ local GetAuras = TMW.COMMON.Auras and TMW.COMMON.Auras.GetAuras
 
 local units = {}
 
-function tmwUnitHasAura(unit, spell)
+function tmwGetUnitAura(unit, spell, onlyMine)
 	local name, rank, icon, castTime, minRange, maxRange, spellID = GetSpellInfo(spell)
-	local unitStr = ConditionObject:GenerateUnitAuraString(unit, TMW:GetSpells(spell).First, false)
-	local config = GetAuras(unitStr)
 
-	return (config.lookup(spell) or config.lookup[spellID]) ~= nil
+	local config = GetAuras(unit)
+
+	if (not config) then return nil end
+
+	local instances = config.instances
+	local lookup = config.lookup
+
+	local spellLookup =  lookup(spell) or lookup[spellID]
+
+	for instanceId,_ in spellLookup do 
+		if (instances[instanceId]) then
+			return instances[instanceId]
+		end
+	end
+	return nil
 end
 
 function getUnitAura(unit, spell)
@@ -42,12 +55,18 @@ end
 TMW_ST.UnitAuras = {
 	unitHasAura = function(unit, spell)
 		if (GetAuras) then
-			return tmwUnitHasAura(unit, spell)
+			return tmwGetUnitAura(unit, spell) ~= nil
 		else
 			return getUnitAura(unit, spell) ~= nill
 		end
 	end,
-	getUnitAura = getUnitAura
+	getUnitAura = function(unit, spell)
+		if (GetAuras) then
+			return tmwGetUnitAura(unit, spell)
+		else
+			return getUnitAura(unit, spell)
+		end
+	end
 }
 
 -- list of current roster memebers
