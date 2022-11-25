@@ -30,7 +30,7 @@ function tmwGetUnitAura(unit, spell, onlyMine)
 	local instances = config.instances
 	local lookup = config.lookup
 
-	local spellLookup =  lookup(spell) or lookup[spellID]
+	local spellLookup =  lookup[spell] or lookup[spellID]
 
 	for instanceId,_ in spellLookup do 
 		if (instances[instanceId]) then
