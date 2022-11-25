@@ -3,6 +3,9 @@ local TMW_ST = TMW_Script_Tools
 
 local CNDT = TMW.CNDT
 local Env = CNDT.Env
+local GetAuras = TMW.COMMON.Auras and TMW.COMMON.Auras.GetAuras
+
+local EVENT_NAME = GetAuras and 'TMW_UNIT_AURA' or 'UNIT_AURA'
 
 local ConditionCategory = CNDT:GetCategory("ATTRIBUTES_TMWST", 11, "Script Tools", false, false)
 
@@ -58,7 +61,7 @@ ConditionCategory:RegisterCondition(8.7,  "TMWSTBUFFCOUNT", {
 	},
 	events = function(ConditionObject, c)
 		return
-			ConditionObject:GenerateNormalEventString("UNIT_AURA")
+			ConditionObject:GenerateNormalEventString(EVENT_NAME)
 	end,
 })
 
@@ -81,6 +84,6 @@ ConditionCategory:RegisterCondition(8.8,  "TMWSTALLGROUPBUFF", {
 	},
 	events = function(ConditionObject, c)
 		return
-			ConditionObject:GenerateNormalEventString("UNIT_AURA")
+			ConditionObject:GenerateNormalEventString(EVENT_NAME)
 	end,
 })

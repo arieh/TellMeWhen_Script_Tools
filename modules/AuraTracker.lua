@@ -1,4 +1,5 @@
 local EventHub = TMW_ST:NewModule("AuraTracker","AceEvent-3.0")
+local GetAuras = TMW.COMMON.Auras and TMW.COMMON.Auras.GetAuras
 
 -- the concept of this tracker is as follows:
 -- 1. We create a unit payload when either:
@@ -17,6 +18,37 @@ local EventHub = TMW_ST:NewModule("AuraTracker","AceEvent-3.0")
 -- list of tracked units
 
 local units = {}
+
+function tmwUnitHasAura(unit, spell)
+	local name, rank, icon, castTime, minRange, maxRange, spellID = GetSpellInfo(spell)
+	local unitStr = ConditionObject:GenerateUnitAuraString(unit, TMW:GetSpells(spell).First, false)
+	local config = GetAuras(unitStr)
+
+	return (config.lookup(spell) or config.lookup[spellID]) ~= nil
+end
+
+function getUnitAura(unit, spell)
+	-- in case the unit is not currently tracked, 
+	-- make sure to add it
+	local config = addUnit(unit)
+	
+	if (not config) then return nil end
+
+	-- normalize input
+	local spellName = GetSpellInfo(spell)
+	return config.auras[spellName]
+end
+
+TMW_ST.UnitAuras = {
+	unitHasAura = function(unit, spell)
+		if (GetAuras) then
+			return tmwUnitHasAura(unit, spell)
+		else
+			return getUnitAura(unit, spell) ~= nill
+		end
+	end,
+	getUnitAura = getUnitAura
+}
 
 -- list of current roster memebers
 local roster = {}
@@ -43,21 +75,6 @@ end)
 _G.debufUnitTracker  = function()
 	ViragDevTool:AddData(units,'TMW ST tracked units')
 end		
-
-TMW_ST.UnitAuras = {
-	getUnitAura = function(unit, spell)
-		-- in case the unit is not currently tracked, 
-		-- make sure to add it
-		local config = addUnit(unit)
-		
-		if (not config) then return nil end
-
-		-- normalize input
-		local spellName = GetSpellInfo(spell)
-		return config.auras[spellName]
-	end
-}
-
 function addUnit(unit)
 	local id = UnitGUID(unit or '')
 
