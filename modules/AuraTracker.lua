@@ -23,7 +23,7 @@ local units = {}
 function tmwGetUnitAura(unit, spell, onlyMine)
 	local name, rank, icon, castTime, minRange, maxRange, spellID = GetSpellInfo(spell)
 
-	local config = GetAuras(unit)
+	local config = GetAuras(TMW.UNITS:GetUnitSet(unit))
 
 	if (not config) then return nil end
 
