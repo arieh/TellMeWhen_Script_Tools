@@ -23,7 +23,8 @@ local units = {}
 function tmwGetUnitAura(unit, spell, onlyMine)
 	local name, rank, icon, castTime, minRange, maxRange, spellID = GetSpellInfo(spell)
 
-	local config = GetAuras(TMW.UNITS:GetUnitSet(unit))
+	local config = GetAuras(unit)
+
 
 	if (not config) then return nil end
 
@@ -32,7 +33,9 @@ function tmwGetUnitAura(unit, spell, onlyMine)
 
 	local spellLookup =  lookup[spell] or lookup[spellID]
 
-	for instanceId,_ in spellLookup do 
+	if not spellLookup then return false end
+
+	for instanceId,_ in pairs(spellLookup) do 
 		if (instances[instanceId]) then
 			return instances[instanceId]
 		end
