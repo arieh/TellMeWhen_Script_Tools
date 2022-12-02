@@ -10,7 +10,7 @@ local EVENT_NAME = GetAuras and 'TMW_UNIT_AURA' or 'UNIT_AURA'
 local ConditionCategory = CNDT:GetCategory("ATTRIBUTES_TMWST", 11, "Script Tools", false, false)
 
 
-function getGroupBuffCount(spell, stop)
+function getGroupBuffCount(spell, stop, countDead)
 	if (not stop) then stop = 10 end
 	local isParty = not IsInRaid()
 	local prefix = isParty and 'party' or 'raid'
@@ -21,8 +21,9 @@ function getGroupBuffCount(spell, stop)
 
 	for i=start, groupSize do
 		local name = i==0 and 'player' or prefix .. i
-
-		if (TMW_ST.UnitAuras.getUnitAura(name, spell)) then
+		if countDead and UnitIsDeadOrGhost(name) then
+			count = count + 1
+		elseif TMW_ST.UnitAuras.getUnitAura(name, spell) then
 			count = count+1
 		end
 
@@ -37,7 +38,8 @@ end
 function isFullGroupCovered(spell)
 	local groupSize = GetNumGroupMembers() or 1
 	if (groupSize == 0) then groupSize = 1 end
-	return getGroupBuffCount(spell, groupSize) == groupSize
+	
+	return getGroupBuffCount(spell, groupSize, true) == groupSize
 end	
 
 
