@@ -128,12 +128,16 @@ function addUnitAura(unit, aura)
 	local config = addUnit(unit)
 	local spellName = GetSpellInfo(aura.name) or aura.name
 
+	if not config then return end
+
 	config.auras[spellName] = aura
 	config.instanceIds[aura.auraInstanceID] = spellName
 end
 
 function removeUnitAura(unit, instanceId)
 	local config = addUnit(unit)
+	
+	if not config then return end
 
 	local spellName = config.instanceIds[instanceId]
 
