@@ -35,8 +35,8 @@ function tmwGetUnitAura(unit, spell, onlyMine)
 
 	if not spellLookup then return false end
 
-	for instanceId,_ in pairs(spellLookup) do 
-		if (instances[instanceId]) then
+	for instanceId, isMine ,_ in pairs(spellLookup) do 
+		if (instances[instanceId] and (isMine or not onlyMine)) then
 			return instances[instanceId]
 		end
 	end
@@ -69,7 +69,10 @@ TMW_ST.UnitAuras = {
 		else
 			return getUnitAura(unit, spell)
 		end
-	end
+	end,
+  getUnitAuras = function(unit, spell, onlyMine)
+    return tmwGetUnitAura(unit, spell, onlyMine)
+  end,
 }
 
 -- list of current roster memebers
