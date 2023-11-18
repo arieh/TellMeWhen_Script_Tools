@@ -25,14 +25,15 @@ local rangeChecker
 local spells = {
    DEATHKNIGHT=49998, 
    DEMONHUNTER=263642, 
-   --DRUID=, 
-   --HUNTER=, 
-   --SHAMAN=, 
-   --MAGE=, 
+   DRUID=666, 
+   HUNTER=777, 
+   SHAMAN=777, 
+   MAGE=777, 
    PALADIN=96231, 
-   --WARRIOR=, 
+   WARRIOR=777, 
    MONK=100780, 
-   --ROGUE=
+   ROGUE=1752,
+   EVOKER=777
 }
 
 local spellName
