@@ -18,10 +18,48 @@ Env.CountInRange = function()
     return TMW_ST:CountInRange()
 end
 
-
 local ConditionCategory = CNDT:GetCategory("ATTRIBUTES_TMWST", 11, "Script Tools", false, false)
-local LibRangeCheck = LibStub("LibRangeCheck-2.0")
-local rangeChecker = LibRangeCheck:GetHarmMaxChecker(8) or LibRangeCheck:GetHarmMinChecker(8)
+local LibRangeCheck = LibStub("LibRangeCheck-3.0")
+local rangeChecker
+
+local spells = {
+   DEATHKNIGHT=49998, 
+   DEMONHUNTER=263642, 
+   --DRUID=, 
+   --HUNTER=, 
+   --SHAMAN=, 
+   --MAGE=, 
+   PALADIN=96231, 
+   --WARRIOR=, 
+   MONK=100780, 
+   --ROGUE=
+}
+
+local spellName
+
+function getRangeSpell()
+   local _, unitClass = UnitClass('player')
+   local spellId = spells[unitClass]
+   local name = GetSpellInfo(spellId)
+   spellName = name
+end
+
+function spellRangeChecker(name)
+    if not spellName then
+        getRangeSpell()
+    end
+
+    return IsSpellInRange(spellName, name) == 1
+end
+
+
+local checkRange = function(name)
+    if not rangeChecker then
+        rangeChecker = LibRangeCheck:GetHarmMaxChecker(8, true) or LibRangeCheck:GetHarmMinChecker(8, true) or spellRangeChecker
+    end
+
+    return rangeChecker(name)
+end
 
 local EnemyCounter = {
     count = 0,
@@ -56,7 +94,7 @@ function TMW_ST:CountInRange(stop)
     for i = 1, EnemyCounter.max_scan do
         name = 'nameplate' .. i
 
-        if _UnitExists(name) and _UnitReaction(name, "player") < 5 and rangeChecker(name) == true then
+        if _UnitExists(name) and _UnitReaction(name, "player") < 5 and checkRange(name) == true then
             count = count + 1
 
             if count == stop then
@@ -111,6 +149,13 @@ function TMW_ST:EnableUnitCounter(stop)
 
     params.registered = true
 end
+
+function clearChecker()
+    rangeChecker = nil
+end
+
+TMW_ST:AddEvent('PLAYER_SPECIALIZATION_CHANGED', clearChecker)
+TMW_ST:AddEvent('PLAYER_TALENT_UPDATE', clearChecker)
 
 function TMW_ST:DisableUnitCounter()
     TMW_ST.InRange.enabled = false
