@@ -23,7 +23,7 @@ function getGroupBuffCount(spell, stop, countDead)
 		local name = i==0 and 'player' or prefix .. i
 		if countDead and UnitIsDeadOrGhost(name) then
 			count = count + 1
-		elseif TMW_ST.UnitAuras.getUnitAura(name, spell) then
+		elseif TMW_ST.UnitAuras.getUnitAuras(name, spell, true) then
 			count = count+1
 		end
 
