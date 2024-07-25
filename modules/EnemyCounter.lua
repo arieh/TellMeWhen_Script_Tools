@@ -20,7 +20,12 @@ end
 
 local ConditionCategory = CNDT:GetCategory("ATTRIBUTES_TMWST", 11, "Script Tools", false, false)
 local LibRangeCheck = LibStub("LibRangeCheck-3.0")
+local rc = LibRangeCheck
 local rangeChecker
+
+LibRangeCheck.RegisterCallback(TMW_ST, rc.CHECKERS_CHANGED, function() 
+    rangeChecker = nil
+end)
 
 local spells = {
    DEATHKNIGHT=49998, 
@@ -56,7 +61,7 @@ end
 
 local checkRange = function(name)
     if not rangeChecker then
-        rangeChecker = LibRangeCheck:GetHarmMaxChecker(8, true) or LibRangeCheck:GetHarmMinChecker(8, true) or spellRangeChecker
+        rangeChecker = LibRangeCheck:GetFriendMaxChecker(rc.MeleeRange) or LibRangeCheck:GetFriendMinChecker(rc.MeleeRange)
     end
 
     return rangeChecker(name)
