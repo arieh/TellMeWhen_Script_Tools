@@ -4,20 +4,38 @@ url: https://github.com/arieh/TellMeWhen_Script_Tools
 required-dependencies:
   - tellmewhen
 
-externals:
-    Lib/LibStub: svn://svn.wowace.com/wow/libstub/mainline/trunk/
-
-    Lib/LibDogTag-3.0: https://github.com/parnic/LibDogTag-3.0.git
-    Lib/LibDogTag-Unit-3.0: https://github.com/parnic/LibDogTag-Unit-3.0.git
-    Lib/LibDogTag-Stats-3.0: https://github.com/ascott18/LibDogTag-Stats-3.0.git
-
-    Lib/LibRangeCheck-3.0: https://github.com/WeakAuras/LibRangeCheck-3.0
-
-    Lib/AceAddon-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceAddon-3.0
-    Lib/AceEvent-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceEvent-3.0
-    Lib/AceComm-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceComm-3.0
-
 enable-nolib-creation: no
+
+externals:
+    Lib/LibStub-1.0:
+        url: https://repos.curseforge.com/wow/libstub/trunk
+        tag: latest
+
+    Lib/LibDogTag-3.0: 
+      url: https://github.com/parnic/LibDogTag-3.0/
+      tag: latest
+    Lib/LibDogTag-Unit-3.0: 
+      url: https://github.com/parnic/LibDogTag-Unit-3.0/
+      tag: latest
+    Lib/LibDogTag-Stats-3.0: 
+      url: https://github.com/ascott18/LibDogTag-Stats-3.0/
+      tag: latest
+
+    Lib/LibRangeCheck-3.0: 
+      url: https://github.com/WeakAuras/LibRangeCheck-3.0/
+      tag: latest
+
+    Lib/AceAddon-3.0: 
+      url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceAddon-3.0
+      commit: default
+
+    Lib/AceEvent-3.0: 
+      url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceEvent-3.0
+      commit: default
+
+    Lib/AceComm-3.0: 
+      url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceComm-3.0
+      commit: default
 
 move-folders:
   Libs/LibRangeCheck-3.0/LibRangeCheck-3.0: Libs/LibRangeCheck-3.0
