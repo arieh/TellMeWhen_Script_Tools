@@ -1,5 +1,4 @@
 package-as: TMW_Script_Tools
-url: https://github.com/arieh/TellMeWhen_Script_Tools
 
 required-dependencies:
   - tellmewhen
