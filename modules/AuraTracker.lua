@@ -1,6 +1,7 @@
 local EventHub = TMW_ST:NewModule("AuraTracker","AceEvent-3.0")
 local GetAuras = TMW.COMMON.Auras and TMW.COMMON.Auras.GetAuras
 local ConditionObject = TMW.ConditionObject
+local GetSpellInfo = C_Spell.GetSpellInfo
 
 -- the concept of this tracker is as follows:
 -- 1. We create a unit payload when either:
